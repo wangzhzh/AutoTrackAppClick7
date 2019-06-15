@@ -12,6 +12,7 @@ import org.gradle.api.Project
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
+import java.util.regex.Matcher
 import java.util.zip.ZipEntry
 
 class SensorsAnalyticsInject {
@@ -33,7 +34,7 @@ class SensorsAnalyticsInject {
             pool.appendClassPath(project.android.bootClasspath[0].toString())
             File jarFile = new File(path)
             // jar包解压后的保存路径
-            String jarZipDir = jarFile.getParent() + File.pathSeparator + jarFile.getName().replace('.jar', '')
+            String jarZipDir = jarFile.getParent() + File.separator + jarFile.getName().replace('.jar', '')
 
             // 解压jar包, 返回jar包中所有class的完整类名的集合（带.class后缀）
             List<File> classNameList = unzipJar(path, jarZipDir)
@@ -70,7 +71,7 @@ class SensorsAnalyticsInject {
                 && !filePath.contains('R.class')
                 && !filePath.contains('R2.class')
                 && !filePath.contains("BuildConfig.class")) {
-            String className = filePath.substring(path.length() + 1, filePath.length() - 6).replaceAll(File.pathSeparator, ".")
+            String className = filePath.substring(path.length() + 1, filePath.length() - 6).replaceAll(Matcher.quoteReplacement(File.separator), ".")
             if (!className.startsWith("android")) {
                 try {
                     CtClass ctClass = pool.getCtClass(className)
