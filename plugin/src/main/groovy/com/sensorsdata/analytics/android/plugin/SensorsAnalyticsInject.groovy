@@ -29,12 +29,11 @@ class SensorsAnalyticsInject {
      */
     static File injectJar(String path, Project project) {
         appendClassPath(path)
-
         if (path.endsWith(".jar")) {
             pool.appendClassPath(project.android.bootClasspath[0].toString())
             File jarFile = new File(path)
             // jar包解压后的保存路径
-            String jarZipDir = jarFile.getParent() + "/" + jarFile.getName().replace('.jar', '')
+            String jarZipDir = jarFile.getParent() + File.pathSeparator + jarFile.getName().replace('.jar', '')
 
             // 解压jar包, 返回jar包中所有class的完整类名的集合（带.class后缀）
             List<File> classNameList = unzipJar(path, jarZipDir)
@@ -71,8 +70,7 @@ class SensorsAnalyticsInject {
                 && !filePath.contains('R.class')
                 && !filePath.contains('R2.class')
                 && !filePath.contains("BuildConfig.class")) {
-            int index = filePath.indexOf(path)
-            String className = filePath.substring(index + path.length() + 1, filePath.length() - 6).replaceAll("/", ".")
+            String className = filePath.substring(path.length() + 1, filePath.length() - 6).replaceAll(File.pathSeparator, ".")
             if (!className.startsWith("android")) {
                 try {
                     CtClass ctClass = pool.getCtClass(className)
