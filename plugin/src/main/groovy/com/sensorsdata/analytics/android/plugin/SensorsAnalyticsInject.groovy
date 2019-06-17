@@ -181,7 +181,7 @@ class SensorsAnalyticsInject {
                     continue
                 }
                 String entryName = jarEntry.getName()
-                String outFileName = destDirPath + "/" + entryName
+                String outFileName = destDirPath + File.separator + entryName
                 File outFile = new File(outFileName)
                 fileList.add(outFile)
                 outFile.getParentFile().mkdirs()
